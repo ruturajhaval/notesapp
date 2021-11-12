@@ -15,7 +15,7 @@ class CreateNotesTable extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->string("uk_title")->unique();
+            $table->string("title")->unique();
             $table->text("description");
             $table->timestamps();
         });

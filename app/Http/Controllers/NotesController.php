@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Notes;
 use App\Models\NotesTags;
+use App\Http\Controllers\JsonResponse;
 
 class NotesController extends Controller
 {
@@ -12,48 +13,48 @@ class NotesController extends Controller
     {
         $notes = Notes::latest()->get();
         $idArray = array_column($notes->toArray(), 'id');
-        $notestags = NotesTags::select("notes_tags.fk_notes_id as id", "notes_tags.fk_tags_id", "tags.uk_tagname")->join('tags', 'notes_tags.fk_tags_id', '=', 'tags.id')->whereIn('notes_tags.fk_notes_id', $idArray)->get();
+        $notestags = NotesTags::select("notes_tags.notes_id as id", "notes_tags.tags_id", "tags.tagname")->join('tags', 'notes_tags.tags_id', '=', 'tags.id')->whereIn('notes_tags.notes_id', $idArray)->get();
         // return $notestags;
         foreach ($notes as $key => $value) {
-            $notes[$key]['fk_tags_id'] = '';
-            $notes[$key]['uk_tagname'] = '';
+            $notes[$key]['tags_id'] = '';
+            $notes[$key]['tagname'] = '';
             foreach ($notestags as $nvalue) {
                 if ($value['id'] == $nvalue['id']) {
-                    $notes[$key]['fk_tags_id'] .= $nvalue['fk_tags_id'].", ";
-                    $notes[$key]['uk_tagname'] .= $nvalue['uk_tagname'].", ";
+                    $notes[$key]['tags_id'] .= $nvalue['tags_id'].", ";
+                    $notes[$key]['tagname'] .= $nvalue['tagname'].", ";
                 }
             }
-            $notes[$key]['fk_tags_id'] = rtrim($notes[$key]['fk_tags_id'], ", ");
-            $notes[$key]['uk_tagname'] = rtrim($notes[$key]['uk_tagname'], ", ");
+            $notes[$key]['tags_id'] = rtrim($notes[$key]['tags_id'], ", ");
+            $notes[$key]['tagname'] = rtrim($notes[$key]['tagname'], ", ");
         }
         return response()->json($notes, 200);
     }
 
-    public function show($id): json
+    public function show($id)
     {
         $notes[] = Notes::find($id)->toArray();
-        $notestags = NotesTags::select("notes_tags.fk_notes_id as id", "notes_tags.fk_tags_id", "tags.uk_tagname")->join('tags', 'notes_tags.fk_tags_id', '=', 'tags.id')->where('notes_tags.fk_notes_id', $id)->get();
+        $notestags = NotesTags::select("notes_tags.notes_id as id", "notes_tags.tags_id", "tags.tagname")->join('tags', 'notes_tags.tags_id', '=', 'tags.id')->where('notes_tags.notes_id', $id)->get();
         foreach ($notes as $key => $value) {
-            $notes[$key]['fk_tags_id'] = '';
-            $notes[$key]['uk_tagname'] = '';
+            $notes[$key]['tags_id'] = '';
+            $notes[$key]['tagname'] = '';
             foreach ($notestags as $nvalue) {
                 if ($value['id'] == $nvalue['id']) {
-                    $notes[$key]['fk_tags_id'] .= $nvalue['fk_tags_id'].", ";
-                    $notes[$key]['uk_tagname'] .= $nvalue['uk_tagname'].", ";
+                    $notes[$key]['tags_id'] .= $nvalue['tags_id'].", ";
+                    $notes[$key]['tagname'] .= $nvalue['tagname'].", ";
                 } else {
-                    $notes[$key]['fk_tags_id'] = '';
-                    $notes[$key]['uk_tagname'] = '';
+                    $notes[$key]['tags_id'] = '';
+                    $notes[$key]['tagname'] = '';
                 }
             }
-            $notes[$key]['fk_tags_id'] = rtrim($notes[$key]['fk_tags_id'], ", ");
-            $notes[$key]['uk_tagname'] = rtrim($notes[$key]['uk_tagname'], ", ");
+            $notes[$key]['tags_id'] = rtrim($notes[$key]['tags_id'], ", ");
+            $notes[$key]['tagname'] = rtrim($notes[$key]['tagname'], ", ");
         }
         return response()->json($notes, 200);
     }
 
     public function store(Request $request)
     {
-        $checkData = Notes::where('uk_title', $request->uk_title)->first();
+        $checkData = Notes::where('title', $request->title)->first();
         if (empty($checkData)) {
             $notes[] = Notes::create($request->all());
             $tags = isset($request->tags) && !empty($request->tags) ? explode(",", $request->tags) : array();
@@ -61,8 +62,8 @@ class NotesController extends Controller
 
             for ($i = 0; $i < count($tags); $i++) {
                 NotesTags::create([
-                    'fk_notes_id' => $notesid,
-                    'fk_tags_id' => $tags[$i]
+                    'notes_id' => $notesid,
+                    'tags_id' => $tags[$i]
                 ]);
             }
 

@@ -15,10 +15,10 @@ class CreateNotesTagsTable extends Migration
     {
         Schema::create('notes_tags', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->unsignedBigInteger('fk_notes_id');
-            $table->unsignedBigInteger('fk_tags_id');
-            $table->foreign('fk_notes_id')->references('id')->on('notes');
-            $table->foreign('fk_tags_id')->references('id')->on('tags');
+            $table->unsignedBigInteger('notes_id');
+            $table->unsignedBigInteger('tags_id');
+            $table->foreign('notes_id')->references('id')->on('notes');
+            $table->foreign('tags_id')->references('id')->on('tags');
             $table->timestamps();
         });
     }

@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Tags extends Model
 {
     use HasFactory;
-    protected $fillable = ['uk_tagname'];
+    protected $fillable = ['tagname'];
 }

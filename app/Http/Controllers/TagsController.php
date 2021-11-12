@@ -21,7 +21,7 @@ class TagsController extends Controller
 
     public function store(Request $request)
     {
-        $checkData = Tags::where('uk_tagname', $request->uk_tagname)->first();
+        $checkData = Tags::where('tagname', $request->tagname)->first();
 
         if (empty($checkData)) {
             $tags = Tags::create($request->all());
