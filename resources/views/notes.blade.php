@@ -57,8 +57,7 @@
 		  	  	<label for="description">Description</label>
 		  	  	<textarea class="form-control" name="description" id='description'></textarea>
 		  	</div>
-		  	<div class="tag-checkbox checkbox">
-		  	  	<label>Select Tags</label>
+		  	<div class="tag-checkbox form-check">
 		  	</div>
       </div>
       <div class="modal-footer">
@@ -106,7 +105,7 @@
 		      	dataType: 'json',
 		      	success: function(data, textStatus, xhr) {
 		      		for(var i = 0, length1 = data.length; i < length1; i++){
-		      			taglist += '<input type="checkbox" id="tags" name="tags" value="'+data[i].id+'">'+data[i].tagname+'<br>';
+		      			taglist += '<input class="form-check-input" type="checkbox" id="tags" name="tags" value="'+data[i].id+'"> '+data[i].tagname+'<br>';
 		      		}
 			      	  	console.log(data);
 		      		$('.tag-checkbox').html(taglist);

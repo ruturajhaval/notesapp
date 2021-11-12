@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Models\Notes;
 use App\Models\NotesTags;
-use App\Http\Controllers\JsonResponse;
 
 class NotesController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         $notes = Notes::latest()->get();
         $idArray = array_column($notes->toArray(), 'id');
@@ -30,7 +30,7 @@ class NotesController extends Controller
         return response()->json($notes, 200);
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
         $notes[] = Notes::find($id)->toArray();
         $notestags = NotesTags::select("notes_tags.notes_id as id", "notes_tags.tags_id", "tags.tagname")->join('tags', 'notes_tags.tags_id', '=', 'tags.id')->where('notes_tags.notes_id', $id)->get();
@@ -52,12 +52,12 @@ class NotesController extends Controller
         return response()->json($notes, 200);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $checkData = Notes::where('title', $request->title)->first();
         if (empty($checkData)) {
             $notes[] = Notes::create($request->all());
-            $tags = isset($request->tags) && !empty($request->tags) ? explode(",", $request->tags) : array();
+            $tags = isset($request->tags) && !empty($request->tags) ? (strpos($request->tags, ",") !== false ? explode(",", $request->tags) : [$request->tags]) : array();
             $notesid = $notes[0]['id'];
 
             for ($i = 0; $i < count($tags); $i++) {
@@ -74,7 +74,7 @@ class NotesController extends Controller
         }
     }
 
-    /*public function update($id, Request $request)
+    /*public function update($id, Request $request): JsonResponse
     {
         $notes = Notes::where("id", $id)->update($request->all());
 
@@ -87,7 +87,7 @@ class NotesController extends Controller
         }
     }*/
 
-    public function delete($id)
+    public function delete($id): JsonResponse
     {
         $notes = Notes::where('id', $id)->delete();
 
