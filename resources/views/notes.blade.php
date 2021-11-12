@@ -12,23 +12,26 @@
 		
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12">
-				<h3>Notes</h3>
+			<div class="col-md-3">
+				<div class="h3">Notes </div>
 			</div>
-		</div>
-	</div>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+			<div class="col-md-3">
+				<div class="h4">
+				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
 				  	Add notes
 				</button>
+				</div>
 			</div>
 		</div>
 	</div>
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12">
+			<h1></h1>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6">
 				<div class="notes list-group">
 				</div>
 			</div>
@@ -38,7 +41,7 @@
 
 <!-- Button trigger modal -->
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
         <form id="idForm">
@@ -108,6 +111,7 @@
 		      			taglist += '<input class="form-check-input" type="checkbox" id="tags" name="tags" value="'+data[i].id+'"> '+data[i].tagname+'<br>';
 		      		}
 			      	  	console.log(data);
+		      		$('.tag-checkbox').empty();
 		      		$('.tag-checkbox').html(taglist);
 		      	},
 		      	error: function(xhr, textStatus, errorThrown) {
